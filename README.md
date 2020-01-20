@@ -8,7 +8,7 @@
  * Mocha
  * Typescript
 ## Frontend:
- * React
+ * React (hooks)
  
   
   
