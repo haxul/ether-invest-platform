@@ -44,9 +44,9 @@ contract SavingBook {
        uint256 amountInDeposit = deposits[msg.sender];
        uint256 curTime = block.timestamp;
        if (amount > amountInDeposit) amount = amountInDeposit;
-       if (amount == 0 || lastTimeInvesting[msg.sender] == 0) revert("no money in deposit");
+       require(amount > 0 && lastTimeInvesting[msg.sender] != 0);
        bool isTimePassed = (curTime - lastTimeInvesting[msg.sender]) > DEPOSIT_TIME; 
-       if (!isTimePassed)  revert("deposit time does not pass"); 
+       require(isTimePassed);
        withdrowStatements[msg.sender] = amount;
        deposits[msg.sender] -= amount;
        emit withdrowAttempt(msg.sender, amount, curTime);
