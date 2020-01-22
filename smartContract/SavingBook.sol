@@ -3,9 +3,10 @@ pragma solidity ^0.5.16;
 import "./Libraries.sol";
 
 contract SavingBook {
+    using ArrayHandler for address[];
     
-    using AddressHandler for address;
-    uint constant DEPOSIT_TIME = 60; // seconds
+    uint constant DEPOSIT_TIME = 60 seconds;
+    uint8 constant  INTEREST_RATE = 10;
     
     event withdrowAttempt (
         address indexed who,
@@ -13,7 +14,12 @@ contract SavingBook {
         uint time
     );
     
-
+    event withdrowSuccess (
+        address indexed reciever,
+        uint sum,        
+        uint time
+    );
+    
     address payable owner;
     
     modifier onlyOwner() {
@@ -21,23 +27,20 @@ contract SavingBook {
         _;
     }
     
-    modifier hasMoney() {
-        require(msg.sender.balance > msg.value);
-        _;
-    }
-    
     mapping(address => uint256) deposits;
     mapping(address => uint256) lastTimeInvesting;
     mapping(address => uint256) withdrowStatements;
+    address[] clients;
     
     constructor() public payable {
         owner = msg.sender;
     }
     
-    function transfer() public payable hasMoney {
+    function transfer() public payable {
         owner.transfer(msg.value);
         setLastTimeInvesting(msg.sender);
         deposits[msg.sender] += msg.value;
+        if (!clients.include(msg.sender)) clients.push(msg.sender); 
     }
     
     function createWithdrowStatement(uint amount) public payable {
@@ -52,6 +55,14 @@ contract SavingBook {
        emit withdrowAttempt(msg.sender, amount, curTime);
     }
     
+    function takeBackInterest(address payable _address) public payable onlyOwner {
+        uint256 interest = (withdrowStatements[_address] / 100) * (100 + INTEREST_RATE);
+        require(interest != 0);
+        require(owner.balance > interest);
+        _address.transfer(interest);
+        emit withdrowSuccess(_address, interest, now);
+    }
+    
     function setLastTimeInvesting(address _address) public {
         lastTimeInvesting[_address] = block.timestamp; 
     }
@@ -60,7 +71,15 @@ contract SavingBook {
         return lastTimeInvesting[_address];
     }
     
-    function getInvesterDeposit(address _address) public view returns(uint256) {
+    function getInvestrerDeposit(address _address) public view returns(uint256) {
         return deposits[_address];
-    } 
+    }
+    
+    function findWithdrowStatementByAddress(address _address) public view returns(uint256) {
+        return withdrowStatements[_address];
+    }
+    
+    function findAllWithdrowStatements() public view returns(address[] memory){
+        return clients;
+    }
 }

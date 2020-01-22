@@ -9,7 +9,7 @@ contract Contract {
     
     function withdraw() public {
     //   msg.sender.transfer(smartContract.balance);
-       msg.sender.transfer(1 ether);
+       msg.sender.transfer(1 ether); // withdrow from smart contract
     }
     
     function getBalance() public view returns(uint256) {
@@ -20,5 +20,5 @@ contract Contract {
         return address(this).balance;
     }
     
-    fallback() external payable {}
+    fallback() external payable {} // send to smartcontract
 }
