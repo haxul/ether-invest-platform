@@ -7,6 +7,6 @@
     "noFallthroughCasesInSwitch": true,
     "esModuleInterop": true
   },
-  "include": ["server/**/*", "test", "server/index.ts"],
+  "include": ["server/**/*", "test", "server/index.ts", "compile.ts", "utils/abiDto.ts"],
   "exclude": ["node_modules", "**/*.test.ts"]
 }
