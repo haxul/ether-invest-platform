@@ -30,9 +30,4 @@ describe("send ether to smart contract", async () => {
     const hash = await savingBookContract.methods.setLastTimeInvesting(accounts[0]).send({ from: accounts[0] })
     assert(hash.transactionHash)
   })
-
-  it("test function", async () => {
-    const hash = await savingBookContract.methods.test().call()
-    assert(hash)
-  })
 })
