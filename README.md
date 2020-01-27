@@ -1,14 +1,9 @@
 # ether-invest-platform
-## Smart contracts:
- * Solidity
-
 ## Backend:
- * Node
- * Koa
+ * Solidity
+## Test:
  * Mocha
- * Typescript
-## Frontend:
- * React (hooks)
+
  
   
   
