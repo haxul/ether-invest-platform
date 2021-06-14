@@ -13,13 +13,6 @@ beforeEach(async () => {
   savingBookContract = await new web3.eth.Contract(ABI, account.address)
 })
 
-describe(" init smart contract", async () => {
-  it("creates accounts", () => assert(accounts.length !== 0))
-  it("depoys smart contract", () => {
-    assert(savingBookContract._address)
-  })
-})
-
 describe("send ether to smart contract", async () => {
   it("transfers one to manager account", async () => {
     const hash = await savingBookContract.methods.transfer().send({ from: accounts[0], value: web3.utils.toWei(".01", "ether") })
